@@ -1,8 +1,11 @@
-#SNAKE!
+# SNAKE
 
-Experimental 2d games engin using a grid to render. Start of a fantasy console maybe. Duktape as engine to make games with JS. 
+Experimental 2d game engine using a grid based renderer.
 
-a place to play with Shaders.
+*Ideas
+
+ -Start of a fantasy console maybe. Duktape as engine to make games with JS.
+ -a place to play with Shaders.
 
 Plus its a snake game.
 
