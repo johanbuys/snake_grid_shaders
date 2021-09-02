@@ -19,10 +19,6 @@
 *
 ********************************************************************************************/
 
-#define SQUARE_SIZE 31
-
-
-
 #include "raylib.h"
 #include "utils.h"
 #include "snake.h"
@@ -101,11 +97,9 @@ int main()
     init(&grid, &player);
     InitWindow(screenWidth, screenHeight, "Snake");
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
-    
+    //--------------------------------------------------------------------------------------
 
-        //--------------------------------------------------------------------------------------
-
-        // Main game loop
+    // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
         // int delta = GetFrameTime();

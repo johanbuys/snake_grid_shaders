@@ -25,7 +25,6 @@ void initGrid(Grid *grid, unsigned int width, unsigned int height, unsigned int 
   {
     arrput(grid->data, 0);
   }
-
 }
 
 unsigned char getGridValueAtIndex(Grid grid, int x, int y)
@@ -49,7 +48,6 @@ void drawGrid(Grid grid) {
   int u_timeLoc = GetShaderLocation(shader, "u_time");
   int u_resLoc = GetShaderLocation(shader, "u_res");
 
-
   float u_time = 0.0f;
   float u_res[2] = {(float)800, (float)800};
   u_time = (float)GetTime();
@@ -71,7 +69,9 @@ void drawGrid(Grid grid) {
         EndShaderMode();
       }
       else if (getGridValueAtIndex(grid, j, k) == 2) {
-        DrawRectangle(j * grid.cellSize, k * grid.cellSize, grid.cellSize, grid.cellSize, GREEN);
+        // BeginShaderMode(shader);
+          DrawRectangle(j * grid.cellSize, k * grid.cellSize, grid.cellSize, grid.cellSize, WHITE);
+        // EndShaderMode();
       }
     }
   }
