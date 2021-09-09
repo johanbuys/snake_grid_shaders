@@ -42,17 +42,9 @@ void setGridValueAtIndex(Grid *grid, unsigned int x, unsigned int y, unsigned ch
 }
 
 void drawGrid(Grid grid) {
-  Shader shader = LoadShader(0, TextFormat("resources/test.fs", 100));
-  // Get variable (uniform) location on the shader to connect with the program
-  // NOTE: If uniform variable could not be found in the shader, function returns -1
-  int u_timeLoc = GetShaderLocation(shader, "u_time");
-  int u_resLoc = GetShaderLocation(shader, "u_res");
-
-  float u_time = 0.0f;
-  float u_res[2] = {(float)800, (float)800};
-  u_time = (float)GetTime();
-  SetShaderValue(shader, u_timeLoc, &u_time, SHADER_UNIFORM_FLOAT);
-  SetShaderValue(shader, u_resLoc, &u_res, SHADER_UNIFORM_VEC2);
+  // float u_time = 0.0f;
+  // float u_res[2] = {(float)800, (float)800};
+  // u_time = (float)GetTime();
   for (int k = 0; k < grid.width; k++) {
     for (int j = 0; j < grid.height; j++) {
       Color color;
@@ -64,14 +56,11 @@ void drawGrid(Grid grid) {
       DrawRectangleLines(j * grid.cellSize, k * grid.cellSize, grid.cellSize, grid.cellSize, color);
       if (getGridValueAtIndex(grid, j, k) == 1)
       {
-        BeginShaderMode(shader);
-          DrawRectangle(j * grid.cellSize, k * grid.cellSize, grid.cellSize, grid.cellSize, RED);
-        EndShaderMode();
+        DrawRectangle(j * grid.cellSize, k * grid.cellSize, grid.cellSize, grid.cellSize, GREEN);
+
       }
       else if (getGridValueAtIndex(grid, j, k) == 2) {
-        // BeginShaderMode(shader);
-          DrawRectangle(j * grid.cellSize, k * grid.cellSize, grid.cellSize, grid.cellSize, WHITE);
-        // EndShaderMode();
+        DrawRectangle(j * grid.cellSize, k * grid.cellSize, grid.cellSize, grid.cellSize, GREEN);
       }
     }
   }

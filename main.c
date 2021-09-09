@@ -1,21 +1,9 @@
 /*******************************************************************************************
 *
-*   raylib [core] example - Basic 3d example
-*
-*   Welcome to raylib!
-*
-*   To compile example, just press F5.
-*   Note that compiled executable is placed in the same folder as .c file
-*
-*   You can find all basic examples on C:\raylib\raylib\examples folder or
-*   raylib official webpage: www.raylib.com
-*
-*   Enjoy using raylib. :)
-*
-*   This example has been created using raylib 1.0 (www.raylib.com)
-*   raylib is licensed under an unmodified zlib/libpng license (View raylib.h for details)
-*
-*   Copyright (c) 2013-2020 Ramon Santamaria (@raysan5)
+*   SNAKE!
+*   Simple snake using a grid based system.
+*   Played with Shaders. Snake changes color based on time passed to shader uniform.
+*   Johan Buys
 *
 ********************************************************************************************/
 
@@ -42,6 +30,13 @@ typedef enum
     GAME_OVER
 } GameState;
 
+void drawPostProcessing(Shader shader, RenderTexture2D target)
+{
+    BeginShaderMode(shader);
+        // NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)
+        DrawTextureRec(target.texture, (Rectangle){0, 0, (float)target.texture.width, (float)-target.texture.height}, (Vector2){0, 0}, WHITE);
+    EndShaderMode();
+}
 
 void drawRunning(Grid grid, unsigned char score) {
     char scoreCharBuffer[10];
@@ -52,10 +47,19 @@ void drawRunning(Grid grid, unsigned char score) {
     DrawText(scoreCharBuffer, screenWidth - (size + 20), 10, 20, RED);
 }
 
+void drawToTexture(RenderTexture2D target, Grid grid)
+{
+    BeginTextureMode(target); // Enable drawing to texture
+        ClearBackground(BLACK);   // Clear texture background
+        drawRunning(grid, score);
+    EndTextureMode();
+}
+
 void drawIntro() {
-    int size = MeasureText("Press [Enter] to GO! READY?", 20);
-    ClearBackground(WHITE);
-    DrawText("Press enter to GO! READY?", (screenWidth - size) / 2, screenHeight / 2, 20, RED);
+    const char text[] = "Press enter to START!";
+    int size = MeasureText(text, 50);
+    ClearBackground(BLACK);
+    DrawText(text, (screenWidth - size) / 2, screenHeight / 2, 50, RED);
 }
 
 void drawGameOver(unsigned char score)
@@ -94,8 +98,12 @@ int main()
 
     static unsigned long int framecount = 0;
 
+
     init(&grid, &player);
     InitWindow(screenWidth, screenHeight, "Snake");
+    Shader shader = LoadShader(0, TextFormat("resources/bloom.fs", 100));
+    RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
+
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
@@ -173,7 +181,9 @@ int main()
                 drawGameOver(score);
                 break;
             case RUNNING:
-                drawRunning(grid, score);
+                // drawRunning(grid, score);
+                drawToTexture(target, grid);
+                drawPostProcessing(shader, target);
                 break;
 
             default:
@@ -186,6 +196,8 @@ int main()
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    UnloadShader(shader);
+    UnloadRenderTexture(target);
     freeSnake(&player);
     freeGrid(&grid);
     CloseWindow();        // Close window and OpenGL context
